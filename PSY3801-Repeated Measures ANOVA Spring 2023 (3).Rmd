@@ -1,0 +1,107 @@
+---
+title: "PSY3801- repeated measures ANOVA"
+author: "Amanda Mae Woodward"
+date: "03/29/2023"
+output: html_document
+---
+This lab will discuss how to conduct a repeated measures ANOVA.
+
+# Learning Outcomes 
+By the end of this lab, students should be able to: 
+- Run a repeated measures ANOVA Null Hypothesis Significance Test 
+- Interpret the output of a repeated measures ANOVA
+
+To accomplish our goals, we'll use the following example: 
+
+Dr. Ellis is interested in how students' memory for course information is influenced by the environment they study in. They have the same 10 people study in four different conditions and immediately take a test on the studied material (test scores range from 0 -10). They obtain the following data:
+
+This week, we'll be using data we create in R. Make sure you run this chunk of code!
+```{r}
+subj<- as.factor(rep(1:10, 4))
+condition<- as.factor(c(rep("alone",10), rep("studygroup", 10), rep("pair",10), rep("nostudy",10)))
+score<- c(10,9,4,5,2,4,6,7,9,10,5,7,8,9,3,4,6,7,4,6,7,8,6,8,7,6,8,2,4,2,6,7,4,3,2,4,5,3,2,1)
+testScores<- cbind.data.frame(subj, condition, score)
+```
+
+**Preregistration Practice**
+- What is Dr. Ellis' research question? 
+- Identify the independent and dependent variables?
+- What are our hypotheses? 
+- What is our alpha value?
+- What do we know about the method? 
+- What statistic should we run? 
+
+## Null Hypothesis Significance Test: 
+The steps for Null Hypothesis Significance Testing for a one way ANOVA are below: 
+**Step 1:** Generate H0 and H1 (Based on Research Question)
+**Step 2:** Choose a statistical test (Based on Research Question)
+**Step 3:** Gather data and set critical area
+**Step 4:** Calculate an observed statistic, calculate a p value
+**Step 5:** Draw Conclusion
+**Step 6:** Calculate an Effect Size
+**Step 7:** Conduct multiple comparisons tests 
+
+### Step 1: Identify Hypotheses 
+
+Now that we have the research question and independent and dependent variables, we can construct our hypotheses. Before continuing, take a second to think through what the null hypothesis and alternative hypotheses would be. 
+
+**Null Hypothesis:** the average test performance across the four conditions do not differ. Average test performance when students study alone , with a group, in a pair, or do not study.
+
+
+Alternative Hypothesis: the average test performance in at least one condition differs from the average test performance in another condition
+(as a reminder, we will only be testing nondirectional hypothesis for ANOVA in this class)
+
+### Step 2: Determine the statistical test 
+- we'll be running a repeated measures ANOVA. Why is this the appropriate test? 
+
+### Step 3: Gather data and set critical area 
+we'll use alpha = 0.05 to set the critical area. The data have been gathered above, and we can view them by looking at the testScores dataset
+```{r}
+testScores
+```
+
+## Step 4: Calculate an observed statistic and associated p value
+
+To calculate the repeated measures ANOVA, we will use the following set up: 
+
+Name we save model to <- aov(dependent variable ~ independent variable + subject Identifier, data= dataframe)
+
+The subject identifier is just the column that indicates which participant's response is in a given row. For instance, the testScores dataframe has a column called "subj" that repeats a subject number for each participant. Other common names are "participant", "subjectNumber", and "ID" 
+
+```{r}
+testScoreAnova<- aov(score~condition +subj, data=testScores)
+summary(testScoreAnova)
+```
+
+## Step 5: Form a conclusion 
+
+Because the probability associated with our F statistic is less than alpha, we reject the null hypothesis and conclude that there is a statistically significant difference between the average test scores across conditions, F(3,27) = 3.34, p = 0.03. 
+
+## Step 6: Conduct multiple comparisons tests 
+
+Our next step will be to compute a post hoc test. As discussed in class, we'll only be using Tukey's HSD for post hoc tests. 
+
+The general syntax for this code is TukeyHSD(aov Model, "independent variable")
+```{r}
+TukeyHSD(testScoreAnova, "condition")
+```
+### Practice
+- Which groups are statistically different from one another? 
+**Answer: study alone vs no study**
+- How would you update our prior conclusion to include information from the posthoc test? 
+**Answer: we would add a sentence saying that the average test score when not studying was significantly lower than the average test score when studying alone**
+## Step 7: Compute the effect size 
+To calculate the effect size, we'll need the lsr package
+```{r}
+library(lsr)
+```
+If you haven't opened it before(or you're using R studio cloud), copy and paste the code below into your console
+install.packages("lsr")
+
+We'll use the etaSquared function: 
+etaSquared(anovaModel)
+```{r}
+etaSquared(testScoreAnova)
+```
+For the purposes of this class, we'll only look at the eta.sq value for condition (eta.sq = 0.20). Based on the cutoffs we used in class, this would be a large effect
+

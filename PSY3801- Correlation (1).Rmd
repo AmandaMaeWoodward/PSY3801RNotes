@@ -1,0 +1,142 @@
+---
+title: "PSY3801- Correlation"
+author: "Amanda Mae Woodward"
+date: "2023-11-27"
+output: html_document
+---
+
+## Overview
+In this lab, we will discuss correlations. We will cover both how to calculate a correlation and how to conduct a null hypothesis significance test for correlation. 
+
+## Learning Outcomes
+The specific learning outcomes for today are: 
+- Students should be able to calculate a correlation in R 
+- Students should be able to create a scatterplot that corresponds to their correlation 
+- Students should be able to conduct a null hypothesis significance test for a correlation
+
+### Calculating a correlation in R 
+There are a couple of different types of correlations, depending on the type of data you have (e.g. categorical, dichotomous, continuous). In R, we calculate them the same way:
+
+`cor(x, y)` will give us a correlation. The default is a Pearson's product moment correlation coefficient, or the one we'll spend most of our time this week discussing. 
+
+let's try an example. We're going to collect data about how much students study and their grades in the course: 
+```{r}
+studyhours<-c(1,4,0,2,3,2,1,1,3,2,0,2,3,4,1,5,2,3,2,3)
+score<-c(80, 99, 75, 82, 94, 90, 88, 71, 100, 91, 62, 89, 96, 98, 87, 99, 76, 79, 81, 87)
+studyData<- cbind.data.frame(studyhours, score)
+```
+
+to calculate Pearson's correlation, r , we would use the following code: 
+```{r}
+cor(studyData$studyhours, studyData$score)
+```
+ 
+ **Practice:** What does this value mean?
+ 
+### Creating a scatterplot that corresponds to a correlation
+
+Just like before, we'll be using `ggplot2` to create our graphs. The graph will start off the same way: 
+
+first, we need to open the `ggplot2` library
+```{r}
+library(ggplot2)
+```
+
+remember- ggplot works in layers. Our base layer is:
+
+`ggplot(data, aes(x,y))`
+
+```{r}
+ggplot(studyData, aes(studyhours, score))
+```
+when we run this, it will create our axes, but won't put any data in the graph until we tell R what *type* of graph to make
+
+to make a scatterplot, we just need to add the layer `geom_point()`
+```{r}
+ggplot(studyData, aes(studyhours, score))+ geom_point()
+```
+
+**Practice:** What do you notice about the scatterplot? 
+
+### Practice: 
+
+We've collected the following data about running and stress levels: 
+minRun refers to the minutes someone runs in a given day
+stress refers to their stress level (1-10) on that same day
+
+```{r}
+minRun<- c(30, 45,60,15,10,0,0,0,0,15,10,25,45,45,60,60,90)
+stress<- c(3,2,1,7,7,6,3,4,6,5,8,4,2,1,4,2,7)
+fit<- cbind.data.frame(minRun, stress)  
+```
+
+1) what is the correlation between running and stress?
+```{r}
+#your code here
+```
+
+2) interpret this value.
+
+**your text here**
+
+3) create a graph that demonstrates the relationship between the two variables
+
+```{r}
+#your code here
+```
+
+4) looking at the graph, what is the relationship between the variables? (e.g. does your interpretation match that from #3?)
+
+### Conduct a Null Hypothesis Signficance Test for a correlation 
+The Null Hypothesis Significance Test for a correlation will look similar to those we've done before. The main difference is that we're not testing mean differences, we're testing for the presence of a **linear relationship**
+
+Let's say that we have the following data: 
+HoursPerWeek: refers to the number of hours per week a student plays video games
+GPA: refers to their GPA in college
+
+```{r}
+Participant<- 1:12
+HoursPerWeek<- c(1,7,10,3,4,6,3,11,8,6,1,0)
+GPA<- c(3.5,2.1,3.4, 2.4,3.7, 4.0, 2.8, 3.4, 3.1, 3.0, 3.8,4.0)
+VideoGameDat<- cbind.data.frame(Participant, HoursPerWeek, GPA)
+```
+
+We want to know if there is a relationship between GPA and Hours spent playing video games
+
+#### Step 1: Hypotheses 
+The null hypothesis for a correlation test specifies that there is no relationship, or not a specific type of relationship (for one tailed tests)
+
+Our prompt does not specify a direction (e.g. we don't say "we're looking for a negative relationship). Therefore, we use a two tailed test 
+
+Null Hypothesis: There is no linear relationship between GPA and hours spent playing video games
+r = 0
+
+Alternative: There is a linear relationship between GPA and hours spent playing video games
+r ≠ 0
+
+### Step 2: Choose a statistical test
+We are calculating a correlation 
+
+### Step 3: Gather data and set critical area
+We've already collected the data. Our critical area will be defined using an alpha level of 0.05
+
+We also need degrees of freedom for the correlation are the total number of paired scores - 2 (N- 2). 
+
+in our case, we have 12 total pairs of scores, so our degrees of freedom are 12-2= 10 
+
+### Step 4: 
+To calculate our correlation, we will use `cor.test()`. It works similarly to `cor()`, but the output is different
+
+```{r}
+cor.test(VideoGameDat$HoursPerWeek, VideoGameDat$GPA)
+```
+
+```{r}
+cor(VideoGameDat$HoursPerWeek, VideoGameDat$GPA)
+```
+
+### Step 5: Draw a conclusion
+In our case, the p value associated with our correlation (0.48) is greater than alpha (0.05). Therefore, we fail to reject our null hypothesis and do not find sufficient evidence to support the idea that hours spent playing video games has a linear relationship with GPA . 
+
+### Step 6: Effect Size
+r is its own effect size! We can interpret a correlation of -.22 as having a small effect. 

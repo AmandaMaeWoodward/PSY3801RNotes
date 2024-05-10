@@ -1,0 +1,137 @@
+---
+title: "PSY3801- Lab 05 Fall 2023"
+author: "Amanda Mae Woodward"
+date: "2023-10-01"
+output: html_document
+---
+# Welcome back to lab
+
+Last week, we worked on graphing and standard scores. This week, we'll work on understanding probability and its relationship to standard scores. 
+
+## Learning Outcomes:
+
+By the end of this lab, students should be able to: 
+
+- Calculate the probability associated with getting higher or lower than a given standard score
+- Calculate the standard score associated with a specific probability 
+- Calculate the raw score associated with a specific standard score or probability
+- Articulate what a sampling distribution is and explain how the central limit theorem relates 
+
+## Loading the Data: 
+the data we are going to use is about loneliness and candy consumption. The data are as follows: 
+
+**participant:** a number between 1 and 50 indicating the participant
+**loneliness:** a loneliness score ranging from 1(not at all lonely) to 10 (very lonely)
+**candyConsumed:** amount of candy a person ate 
+```{r}
+
+```
+
+### Learning Outcome #1: Calculate the probability associated with getting higher or lower than a given standard score
+
+### Reminder on standard score calculation: 
+We can use the `scale()` function to calculate standard scores for a whole
+variable, if we have access to the whole variable. In our case, we have
+the data and can calculate a z score this way.
+
+`scale()` uses the following format: `scale(data$columnName)`
+
+Let's calculate the standard score for the loneliness scale
+```{r}
+candyDat$lonelinessZ<- scale(candyDat$loneliness)
+```
+
+We can view these numbers by looking at our dataset and compare them to our mean and standard deviation.  
+
+Take a minute to talk to each other about interpretation: 
+1) what does a z score of 0.29 mean? 
+2) what does a z score of -1.17 mean? 
+3) what does a z score of 1.39 mean? 
+
+In addition to saying which standard score is higher or lower, we can look at probability. Probability allows us to ask questions like: 
+ 
+ "What is the likelihood of getting a standard score of -1?" 
+ 
+To answer this questions, we need to use the function `pnorm()`
+
+`pnorm()` gives the probability of getting a range of scores. We can decide if we want higher or lower than a specific score. 
+
+Let's say that we want to know the probability of obtaining a score less than or equal to 1.75. We would use the following: 
+
+`pnorm(zScore, lower.tail = TRUE/FALSE)`
+
+```{r}
+library(ggplot2)
+ggplot(, aes(rnorm(100000)))+ geom_histogram()+ geom_vline(xintercept = 1.75,color="purple", size=1)+theme_classic()
+```
+
+```{r}
+pnorm(1.75, lower.tail= TRUE)
+
+```
+
+We can look at the graph we made above and see the area represented by this probability. 
+
+If we wanted to get the probability of 1.75 or higher, we could do this
+```{r}
+pnorm(1.75, lower.tail=FALSE)
+```
+
+Remember, the probability of the whole distribution is equal to 1. If you wanted to, you could use the answer from "less than" and subtract it from 1 to get the same answer.
+```{r}
+1- 0.9599408
+```
+
+### Learning Outcome 1 Practice
+1) calculate the probability of obtaining a z score of 0 or less
+2) calculate the probability of obtaining a z score below -1.5 
+3) calculate the probability of obtaining a z score above 1.5
+
+### Learning Outcome #2: Calculate the standard score associated with a specific probability
+
+We can also work in the opposite direction. We can use a probability of a score to look up a specific z score or standard score using the function `qnorm()` In other words, we're asking what standard score is the boundary or cut off for a specific area, or probability 
+
+Let's find the standard score (z score) associated with a probability of .09
+`qnorm(probability, lower.tail = TRUE/FALSE)`
+```{r}
+qnorm(.09, lower.tail = TRUE )
+```
+This gives us the score associated with a probability of .09 or less. 
+
+If we want to know about the highest .09, we would need to do the following:
+```{r}
+qnorm(.09, lower.tail=FALSE)
+```
+
+### Learning Outcome 2 Practice: 
+1) What z score cuts off the top 5% (0.05) of the distribution? 
+2) What z score is associated with probability of .46 in in the lower side?
+
+### Learning Outcome #3: Calculate the raw score associated with a specific standard score or probability
+
+The last thing that we need to talk about with standard scores is how we can go from a standard score to the value in raw score units. 
+
+z= score - mean/ standard deviation 
+
+z * standard deviation + mean = raw score
+
+Let's practice with the Valentine's day data. 
+
+We want to know how much candy the top 20% of consumers eat on the holiday. To look at this, we need to first find the z score associated with the highest 20%
+```{r}
+z<- qnorm(.2, lower.tail=FALSE)
+z
+```
+
+Then, we need to transform our standard score of .84 to the raw score. To do this, we need to use another version of the equation: 
+z * standard deviation + mean = raw score
+```{r}
+z* sd(candyDat$candyConsumed) + mean(candyDat$candyConsumed)
+```
+The top 20% eat at least 20 pieces of candy (rounded up). 
+
+### Learning Outcome #3 Practice: 
+1) How much candy do the lowest 10% of participants eat? 
+2) How much candy do the middle 50% eat? 
+
+

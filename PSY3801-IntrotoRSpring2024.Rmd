@@ -1,0 +1,154 @@
+---
+title: "PSY3801- Introduction to R Lab"
+author: "Amanda Mae Woodward"
+date: "01/13/2024"
+output: html_document
+---
+# Welcome to your PSY3801 Section
+
+In section, we will work to reinforce some of the statistical concepts and computations that are covered in lecture. For our first meeting, we will spend some time getting used to R Studio and getting to know each other. 
+
+## Learning Outcomes
+For this class, you should be able to do the following:
+
+* Know your section leader and learn a little about each other
+* Understand and contribute to section expectations 
+* Install R and R Studio on your computer (or know how to access R Studio Cloud)
+* Describe how the different panels of R Studio work
+* Knit a file to .pdf or to .html in order to submit assignments (if time)
+
+## Learning Outcome 1: Get to know each other 
+
+To get to know each other, we'll start by introducing ourselves. What I'd like you to do is get into small groups (3-4 people). I will give you 5 minutes to do the following: 
+
+* Introduce yourselves to each other
+* Find two things that you have in common (movies, sports, hobbies... ANYTHING THAT's NOT BEING ENROLLED IN THIS CLASS)
+
+After you complete this, I'll ask you all to share what two things you've found in common. 
+
+## Learning Outcome 2: Setting Expectations 
+
+Overall, we expect that section will be a time that you can learn additional information about the course material, clear up any misunderstandings, and gain a better grasp of R. 
+
+You will get the most out of section by actively participating. If I am going through a demonstration, it's helpful for you to try it at your seats. If I am going too fast, please let me know or ask questions as they come up. During the practice components, you should try to actively solve the problems. It's ok to say if you need more time. 
+
+Before our class starts, it's important to set expectations for how we will work together. Let's take some time to do this now. Some questions we should consider: 
+
+* How should we participate and/or ask questions? (out loud? raising hands? just speaking?)
+* What would make you more comfortable participating in this class?
+* How should we address any issues/confusions that occur? 
+
+## Learning Outcome 3: Installing R/R Studio and/or accessing R Studio Cloud
+
+As psychologists, we use statistics to answer our research questions. We use statistical programs so that we do not have to compute statistics on large datasets by hand! 
+
+This semester, you will learn how to use the programming language, R, to analyze data. While there are many programs we could use, R has a few advantages: 
+
+* FREE! (other statistical programs can cost thousands of dollars!)
+* R is Open source, so we can use code and contribute new ones. We can even use codes written by other researchers.  
+* **Really** good graphs
+* Easy to reuse code (save time) and share (transparency in research). This is also part of open science (whichi is a good thing!)
+
+### Why are we learning to use R? 
+
+You might be wondering **why** you're learning to program in this class, particularly if you aren't considering graduate school. Learning programming languages is applicable across a wide variety of careers and important skills like **persistence**, **efficient problem solving**, and **critical thinking**. Hand calculations do not facilitate these skills. 
+
+### Accessing R/R Studio
+There are directions for how to do this posted on the Canvas site with videos (and hopefully you've had a chance to look at this.) 
+
+Because there are different ways and different errors that occur, we'll take some time to make sure everyone is on the same page. 
+
+To download R: https://cran.r-project.org
+To download R Studio: https://www.rstudio.com
+**Note** you will need both of these for R Studio to work
+
+If you have a Chromebook, you will need to use AppsToGo (unless you are comfortable using the terminal and Linux more generally.)
+
+To use appstogo: https://apps.umn.edu/
+**Note:** R and R Studio are already installed on this desktop
+
+## Learning Outcome 4: Understanding R Studio Layout and Some Coding Basics
+
+### So how will we learn R? 
+
+We will be using the R Studio and R Markdown files (.Rmd) files because they will allow us to include both text and code in separate areas. 
+
+To use this, we need to understand what it looks like:
+
+### Four Windows 
+
+* Top Left: **R Markdown File:** This is where you will answer questions and write code for R assignments. **Make sure to save your work**
+
+* Bottom Left: **Console:** This is a little like **scrap paper**. You can use this to try to answer questions or to write code. **Scrap paper does NOT save when you exit out of R Studio** This means we won't be able to grade anything written in this section! 
+
+* Top Right: **Environment** (and some other things): The top right section will be blank for now, but any variable you make or any data set you upload will be saved here.
+
+* Bottom Right: **Everything else:** There are several tabs you can open in this section. We'll talk about them through class. 
+
+### The R Markdown File 
+R Markdown Files are great because we can both type regular text and include areas that we will code in. 
+
+* To write non-code, you don't have to do anything special, just write! (like this!) 
+* When writing code, you need to create a coding area (R refers to these as **code chunks**)
+* To add a code chunk, click "Code" in the top tool bar and select "Insert Chunk." This will create a code chunk like this:
+
+```{r}
+
+```
+
+You will know that it worked because the background of the coding area will be another color.
+
+* You should only write code in the code chunk. If you want to write text, make sure it's in quotes or after "#"
+```{r}
+#help! 
+"I got this"
+```
+
+We'll use R to run a simple math equation. (Note: R follows order of operations for math, so make sure to use parentheses if you need to!) 
+```{r}
+3+4
+```
+How do we get R to give us answers to our codes? We need to tell it to "run" our code. We can do this by selection "Run" in the tool bar underneath our R Markdown File name. We can also run code by putting our cursor on the line we want to run and pressing "Command(Mac)/Control(PC)" and "Return/Enter". 
+
+Try running the following calculation examples
+```{r}
+"Addition"
+2+4
+
+"Subtraction"
+13-2
+
+"Multiplication"
+7*4
+
+"Division"
+100/20
+```
+
+#### Practice Problems (if time)
+1. Create a code chunk and run code to find the answer to 7*24. 
+
+### Programming in R 
+
+We can save the answers to our equations in R. This lets us use them by typing the name of the variable and pressing "Run"
+
+```{r}
+Answer<- 3+7
+```
+
+When you press "Run", you should see that "Answer" pops up in your **environment** (top right panel). Then, if you write "Answer" in the code chunk and press "Run", you will see that R outputs our answer, 10, in the console.
+
+```{r}
+Answer
+```
+
+- Note: Error messages will happen **a lot**. I get them when I code now and it is part of learning. While they can be frustrating at first, you will learn to interpret them. 
+
+####Practice Problems (if time)
+1. Create a code chunk, then make a variable called "Number". Set it equal to 13*7. What is your answer? 
+
+2. What did you notice about the Answer stored in the Environment?
+
+
+## Learning Outcome 5: Knitting .Rmd Files
+It's really important for you all to know how to knit .Rmd files because this is how you will hand your homework in! I will show you how to do this now, but know there are additional pieces of information on the Canvas website for those using R Studio Cloud or who'd like another reference. 

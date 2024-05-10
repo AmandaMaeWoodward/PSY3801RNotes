@@ -1,0 +1,131 @@
+---
+title: "PSY3801- Week 2 Lab Notes"
+author: "Amanda Mae Woodward"
+date: "2024-01-16"
+output: html_document
+---
+
+# Welcome back to lab! 
+
+This week, we will go over some of the basics of R Programming. This will help set the foundation for calculating statistics and printing our outputs in future lab sections. 
+
+## Learning Outcomes:
+
+By the end of this lab, students should be able to: 
+
+1) Create and print variables
+2) Upload data to R and be able to view it 
+3) Run previously written code
+4) Install and open libraries 
+
+### Learning Outcome #1: Create and print variables
+
+Last week, we talked about making code chunks and how to create a variable. As a reminder, any text written in this file is treated like text unless it's inside a code chunk. 
+
+```{r}
+
+```
+You can make code chunks manually (e.g. typing the characters above), clicking "Code" in the menu above and "insert chunk", or 
+keyboard shortcut (PC: control + alt+i ; Mac: control+option+i) 
+
+This week, we'll be discussing what types of information can be stored in R and how to access that information. 
+
+We can save lists of numbers (sometimes called a vector) the same way we stored one number. The only difference is that we'll need to put the numbers into a function `c()`. `c()` stands for concatenate (or combine). 
+
+Here, we'll rate how likely you are to watch the next season of the Bear (on Hulu) from 1: absolutely not watching to 5: absolutely watching
+
+Can 5 people tell me how likely they are to watch this show? 
+```{r}
+
+```
+if we run the code above, we see the ratings you all gave. However, to use those numbers again, we have to keep typing them out. This is a lot of work! 
+
+We can save the ratings above to a variable. To do this, we type what we want to call our data, then we'll use an assignment arrow `<-`  
+```{r}
+# copy ratings behind assignment arrow (carrot) or place ratings in the parentheses
+watchTheBear<- c()
+#print data by running the next line
+watchTheBear
+```
+
+We can use the same strategy to save words in R. Here, we'll make a variable that contains all of your favorite TV shows. To do this, we'll need to write the names of shows in quotation marks. 
+
+Can five students tell me their favorite TV show? 
+```{r}
+#need 5 student responses
+favoriteTV<-c("insert TV show1", "tvshow2") 
+#print variable
+favoriteTV
+```
+
+#### Practice Problems (to be done by students, alone or in groups)
+After you all attempt problems, we'll go over the answers together
+
+1) Write a list of 3 numbers. Save it as `myNumbers`. 
+2) Your friend tries to make a list containing the numbers 1 through 5. When they run the code, R outputs "12345." What did your friend do incorrectly? 
+3) Create a variable that contains three types of fruit
+
+### Learning Outcome #2:  Upload data to R and be able to view it
+This year, we'll be learning how to import data into R Studio. To do this, we need to take a couple of steps: 
+1) Download the data from Canvas (or download the Rproject)
+2) Select the import button in the global environment (top right for me)
+3) Select "From Text base"
+4) Find the data on your computer (most likely in the downloads folder)
+
+This part can be tricky, so we'll wait to check to see if everyone has it. 
+
+In my console, you can see that there is code to import the data now. You should **always** copy this code into your .Rmd file. 
+```{r}
+PSY3801.Lab2.Notes.Data <- read.csv("~/Desktop/PSY3801- Lab 2/PSY3801-Lab2 Notes Data.csv")
+```
+
+If your data now has a long name, you may choose to shorten it. Because our data are about being excited for fall (1 = not at all; 10 = very), I'm going to rename our data springDat. 
+
+```{r}
+springDat<- read.csv("~/Desktop/PSY3801- Lab 2/PSY3801-Lab2 Notes Data.csv")
+```
+
+To look at our data, we'll use the function `View()`. (generally, don't put view in the rMarkdown file because this can make knitting harder.).  This opens our data in a new window. If we look at our data, we can see that we have 10 participants who have given ratings on how much they like spring.
+
+The columns in a dataframe are like the vectors we made earlier (just long lists of numbers or words). To access them, we need to do more than just write their names. For instance, if we wanted to print the column named "Participant", we can't just write Participant in a code chunk. We need to use a new function, `$`. To do this, we use the following format:
+`data set$column name`
+
+```{r}
+springDat$Participant
+```
+
+### Practice Problems: 
+1) Write and run code to print the excitedSpring column
+
+### Learning Outcome #3: Run previously written code
+Occasionally, we'll provide you with some code that is already written. This may be to load data into R another way or to demonstrate an example of how to use a specific function. To run code, you can either use the keyboard shortcut (command + return on a mac, control + enter on a PC), a green play button (depending on your version of R), selecting "Code" --> Run selected lines, or the "Run button at the top of the file. 
+
+Let's try it: 
+
+```{r}
+"Run this line of code"
+3+9
+```
+
+### Learning Outcome #4: Install and open libraries
+A function is a way to do specific actions in R. The people who made R made a lot of functions that come predownloaded. The functions that come already installed are called "base R functions." However, there are additional things we want to do that aren't included in the R download. Some researchers have made additional functions to make our lives easier. These are located in specific libraries that we need to download. 
+
+To download a package, we need to use the function called `install.packages()`.
+
+We'll practice using this to download the ggplot2 package, which we will need when we graph in a couple of weeks. 
+
+```{r}
+install.packages("ggplot2")
+```
+Generally, you do not want to install a package in the Markdown file, as it will not let you knit your file. You should do this in the console or delete the line of code once you download it. 
+
+After you install ggplot2, we can open the library using the `library()` function. 
+
+```{r}
+library(ggplot2)
+```
+
+We can see that this worked by looking in the packages tab (bottom right panel). We can see that ggplot2 is located in the list of packages AND has a checkmark next to it. 
+
+###Practice:
+1) Practice installing the modeest package

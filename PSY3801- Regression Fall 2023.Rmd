@@ -1,0 +1,171 @@
+---
+title: "Regression Lab"
+author: "Amanda Mae Woodward"
+date: "11/27/2023"
+output: html_document
+---
+
+# Learning Outcomes:
+After this week's lab, you should be able to do the following: 
+- Examine and interpret regression output 
+- Predict values from a regression equation 
+- Graph a regression line on the scatter plot
+- Describe regression pitfalls and how they influence our regression equation  
+- Compute and interpret coefficients in a multiple regression equation
+
+### Learning Outcome 1: Examine and interpret regression output 
+As we talked about in class,  you can compute a regression equation in R using the function `lm()`. 
+
+It uses the following structure: 
+`lm(y variable ~ x  variable, data = dataset)`
+
+Let's say we were interested in how people respond to watching Grey's Anatomy. We have the following variables: 
+
+1) hbm: heart beats per minute for a participant
+2) rating: participants' rating of how distressing the episode they watched is (1 = very distressing; 10 = not at all distressing)
+3) tears: minutes each participant cried in each episode
+4) participant indicates the participant number (a way to keep track of the person who answered)
+
+We'll make our data here:
+```{r}
+hbm<- c(60,55,67,63,69,70,75,71,72,74,78,80,60,62)
+rating<- c(1,7,2,3,1,4,6,4,8,5,3,4, 2,1)
+tears<- c(5,10,15,20,0,5,10,15,20,15,10,5,5,10)
+participant<- 1:14
+Greys<- cbind.data.frame(participant, rating, tears, hbm)
+```
+
+to make our simple regression, we will predict the number of tears from the distress rating 
+```{r}
+lm(tears ~rating, data=Greys)
+```
+Let's practice interpreting these coefficients: 
+
+We can also save this model to get more information: 
+```{r}
+GreysRegression<- lm(tears ~rating, data=Greys)
+GreysRegression
+```
+Notice that it's the same exact function, but now we've saved it to "Greys Regression"
+
+We can get more information by using the summary function: 
+```{r}
+summary(GreysRegression)
+```
+This gives us the same coefficient, some other information we won't worry about for now, and the coefficient of determination 
+
+Notice that the coefficient of determination is the same as if we had calculated it using the correlation:
+```{r}
+cor(Greys$tears, Greys$rating)^2
+```
+
+### Learning Outcome 2: Predict values from a regression equation 
+
+y hat = 5.79 + 1.25*rating
+
+We can also get numbers like the predicted values of y or the amount of error:
+```{r}
+GreysRegression$fitted.values #predicted values of y (tears)
+```
+
+We can look at our actual y values and the predicted values next to each other
+```{r}
+cbind.data.frame(Greys$tears, GreysRegression$fitted.values)
+```
+
+The residuals from our regression give us the difference between our observed values and the value on our regression line  
+```{r}
+GreysRegression$residuals #error terms 
+```
+
+### Learning Outcome 1 & 2 Practice: 
+- Create a regression equation that predicts heart beats per minute from the amount of time a participant cried
+- Write the equation out
+- What is the coefficient of determination and what does it mean?
+
+### Learning Outcome #3:  Graph a regression line on the scatter plot
+
+It can be helpful to add our regression line to our scatter plot. We can do this by adding another layer to our scatterplot:
+
+```{r}
+library(ggplot2)
+ggplot(Greys, aes(rating, tears)) + geom_point() 
+```
+
+we can add `geom_smooth(method="lm")`
+
+```{r}
+ggplot(Greys, aes(rating, tears)) + geom_point() +geom_smooth(method="lm")
+
+```
+
+### Learning Outcome #4: Describe regression pitfalls and how they influence our regression equation
+
+In lab, we're going to focus specifically on the idea of outliers and why we shouldn't predict numbers outside of our actual collected data. 
+
+To do so, we will start by graphing our regression
+```{r}
+ggplot(Greys, aes(rating, tears)) + geom_point()+geom_smooth(method="lm")
+```
+
+Currently, the amount of time cried is mostly between 20 and 0 minutes. I'm going to change our data so that we have a value of 60 minutes of tears.
+```{r}
+Greys$tears<- c(5,10,15,20,0,5,10,15,20,15,10,5,5,60)
+```
+let's see how this changes our graph:
+```{r}
+ggplot(Greys, aes(rating, tears)) + geom_point()+geom_smooth(method="lm")
+```
+If we look at both of these graphs, we can see that the slope has changed! 
+
+One question that can come up is how can we tell if a score is an outlier? One way we can check is visually. We can make a boxplot of our data: 
+```{r}
+ggplot(Greys, aes(tears))+geom_boxplot()
+```
+Remember, Boxplots show us the spread of our data. To relate this back to descriptive statistics, the bold middle line is the median. The two edges of the box portion give us the first quartile and third quartile (if we subtract these, we get our interquartile range). 
+
+As we can see, the data are all pretty close together, with the exception of the person who cried for 60 minutes. These sorts of plots can give us a sense of whether a data point is an outlier.
+
+It can be tricky to determine if an extreme data point is a true value or if it's not (e.g. we entered the data incorrectly)
+
+### Learning Outcome 4 Practice: 
+- Are there any outliers in the participant ratings? How do you know? 
+
+
+### Learning Outcome 5: Compute and interpret coefficients in a multiple regression equation
+
+We compute multiple regression equations the same way we make a simple regression equation in R. Let's practice by predicting the number of tears a participant cries from their distress rating and  
+the number of 
+```{r}
+lm(tears~rating+ hbm, data=Greys)
+```
+
+As before, we can save this and use summary to get the multiple coefficient of determination:
+```{r}
+multipleGreys<- lm(tears~rating+ hbm, data=Greys)
+summary(multipleGreys)
+```
+Let's practice interpreting these values: 
+
+### Learning Outcome 5 Practice: 
+
+We collect the following data: 
+anxiety: participants' anxiety rating on the Beck Anxiety Scale (lower scores = less anxiety)
+risk: the amount of risk taking behavior (low scores = less risky decisions) in the BART (Balloon Analogue Risk Task)
+impulsivity: participants' impulsivity scores (1- 10)
+```{r}
+anxiety<- c(5,10,15,20,25,30,25,15,29,23,5,1,2,30,14,15,7,16,12,11)
+risk<- c(10,8,7,6,5,4,3,6,12,6,8,2,13,8,9,6,8,14,17,18)
+impulsivity<- c(8,9,10,6,8,6,5,3,2,6,1,3,5,7,8,9,10,1,3,5)
+participant<-1:20
+riskData<-cbind.data.frame(participant, anxiety,impulsivity, risk)
+```
+
+1)Predict risk from both anxiety and impulsivity.
+2) Write out your equation. What do the values mean? 
+3) What is the multiple coefficient of determination. Explain what it means 
+
+
+
+
+

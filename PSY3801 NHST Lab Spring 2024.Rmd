@@ -1,0 +1,154 @@
+---
+title: "PSY3801- Lab 06 Spring 2023"
+author: "Amanda Mae Woodward"
+date: "2023-02-15"
+output: html_document
+---
+
+# Welcome back to lab
+
+Last week, we worked on understanding probability and its relationship to standard scores. This week, we'll talk about Null Hypothesis Significance Testing and Z statistics. 
+
+## Learning Outcomes
+By the end of this lab, students should be able to: 
+
+- Describe Sampling Distributions and Explain how they relate to Null Hypothesis Significance Testing
+- Conduct a Null Hypothesis Significance Test for a Z statistic
+
+### Learning Outcome #1: Describe Sampling Distributions and Explain how they relate to Null Hypothesis Significance Testing
+
+Last week, we covered a lot of information about sampling distributions. Let's take a minute to make sure we're all on the same page. 
+
+I'd like you to think through what we've talked about with sampling distributions and be able to answer the following questions:
+
+1) What is a sampling distribution?
+2) What are the characteristics of samples that make up a sampling distribution? 
+3) Why are sampling distributions important?
+4) What is the central limit theorem? 
+5) What is Null Hypothesis Significance Testing? 
+
+## Learning Outcome #2: Conduct a Null Hypothesis Significance Test for a Z statistic
+
+### Null Hypothesis Significance Testing Steps: 
+
+Null Hypothesis Significance Testing is one of the approaches we can use to make inferences from the data that we collect. This week, we'll cover this approach for a z test.
+
+The steps for Null Hypothesis Significance Testing are below.
+
+**Step 0:** Articulate your research question
+**Step 1:** Generate H0 and H1 (Based on Research Question)
+**Step 2:** Choose a statistical test (Based on Research Question)
+**Step 3:** Set critical area
+**Step 4:** Gather Data 
+**Step 5:** Calculate an observed statistic,and associated p value
+**Step 6:** Draw conclusion and interpret in context of the problem
+
+### Step 0: Articulate your research question
+Let's say that we have the following research question: 
+Does teaching style improve students' sense of belonging in a statistics class? 
+
+### Step 1: Generate H0 and H1 (Based on Research Question)
+
+#### Null Hypothesis: 
+
+Teaching style does not improve students' sense of belonging in a statistics class
+
+Mathematically, we can write this as the average from the population represented by our sample (mu)  ≤  known population mean 
+
+### Alternative Hypothesis: 
+
+Teaching style improves students' sense of belonging in a statistics class
+
+Mathematically, we can write this as the average from the population represented by our sample (mu) > known population mean 
+ 
+#### Hypotheses 
+
+If we had more information we could make our hypotheses more specific. The prompt below will give us the population mean and standard deviation, both of which are necessary for us to calculate a z statistic (or complete a z test)
+
+We are interested in whether teaching style improves a students' sense of belonging. The average amount of belonging in our sample of 200 is 7.2, while the population's average sense of belonging is 5.6 with a standard deviation of 8.8. 
+ 
+ We can update our hypotheses as follows: 
+ 
+#### Updated Null Hypothesis: 
+
+The average sense of belonging is not greater than 5.6 
+mean of the population represented by our sample ≤ 5.6 
+
+#### Updated Alternative Hypothesis: 
+
+The average sense of belonging is greater than 5.6 
+mean of the population represented by our sample > 5.6 
+ 
+### Step 2: Choose a statistical test (Based on Research Question)
+
+Now that we have our hypotheses and research question, we can think about the analysis that is best. For this example, we should use a z test because the population mean and standard deviation are known. 
+
+In the real world, we would use our design to determine our analysis and then collect our data. In this class, you should justify the analysis you choose based on the information you are given in the prompt.  
+
+### Step 3:  Set critical area
+
+To set the critical area, students can explicitly state the alpha level and the reason for that threshold. For z statistics, you should also specify what the critical z value would be. You can get this by using `qnorm()`.
+
+For us, alpha is 0.05 because of convention. 
+
+To get the critical z value, we can use `qnorm(alpha, lower.tail=TRUE/FALSE).` Our research question is **directional**, so we can look on one side of the distribution. 
+
+We need to look on the side that is unlikely if the null is true. Our null hypothesis is "mu ≤ 5.6," which means that "unlikely" would be the upper tail, or right side. 
+```{r}
+qnorm(.05, lower.tail=FALSE)
+```
+
+### Step 4: Gather Data 
+For this class, we won't have to collect data, but you should include a sentence about how the data are collected based on the prompt. 
+
+"We are interested in whether teaching style improves a students' sense of belonging. The average amount of belonging in our sample of 200 is 7.2, while the population's average sense of belonging is 5.6 with a standard deviation of 8.8." 
+
+We collected data from a 200 person class. Students in this class took a survey about their feelings of belonging.
+
+### Step 5: Calculate the observed statistic,and associated p value
+
+#### Observed z statistic
+After completing these steps, we would need to compute our z statistic: `(sample mean - given population mean)/ standard error`
+
+First, we need to compute our standard error:
+`population standard deviation/sqrt(sample size)`
+```{r}
+standardError<- 8.8/sqrt(200)
+
+standardError
+```
+
+Then, we can calculate our z statistic
+```{r}
+z<-(7.2-5.6)/standardError
+z
+```
+our z score is 2.57
+
+#### Associated p value
+We would then compute the probability of our obtained z statistic. Our research question asks if teaching style "improves" or increases sense of belonging.
+
+We can use `pnorm()` to find the area that is above our z statistic 
+```{r}
+pnorm(z, lower.tail = FALSE)
+```
+
+This p value gives us the likelihood of obtaining our z statistic if the null hypothesis is true. In other words, the likelihood of getting a z statistic of 2.57 would be equal to 0.005. 
+
+### Step 6: Draw conclusion and interpret in context of the problem
+Given that this value would be unlikely (.005 is 0.5%), we can **reject** the null hypothesis. Thus, our conclusion would be that it is unlikely that teaching style does not impact sense of belonging. 
+
+We're using an intuitive way of making a decision. However, there are times where one may need to make a binary decision. To do this, we can use the alpha value (an arbitrary cut put for what is "unlikely enough"). Typically, the alpha level is set to 0.05 in psychology. However, this is the researchers decision. 
+
+### Learning Outcome 2 Practice: 
+You have 10 bags of skittles and wonder if their average weight is less than the population average. The average weight for a bag of skittles in your sample is 210 grams. On average, bags of skittles from the manufacturer weigh 204 grams with a standard deviation of 5 grams. 
+
+1) What is your research question?
+2) What is your null hypothesis?
+3) What is your alternative hypothesis?
+4) What statistic should you calculate and why?
+5) What is your alpha value? What is your critical statistic? 
+6) What can you tell us about the collected data?
+7) Calculate the statistic
+8) What conclusion can you draw? 
+

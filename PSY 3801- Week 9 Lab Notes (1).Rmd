@@ -1,0 +1,163 @@
+---
+title: "Week 9 Lab"
+author: "Amanda Mae Woodward"
+date: "3/21/2022"
+output: html_document
+---
+
+### Learning Outcomes
+In this week's lab, we'll talk about the following: 
+- Conduct an independent samples t-test
+- Conduct a paired samples t-test 
+
+### Learning Outcome 1: How to conduct an independent samples t-test
+We are interested in whether people who study frequently and those who do not report a different number of friends. To study this, we collected asked 25 undergraduates who study frequently in a week and 25 undergraduates who study rarely in a week how many friends they have. The data is below: 
+
+```{r}
+lowStudy<- c(10,15,12,9,3,2,5,6,4,10,8,7,6,4,7,8,6,4,8,9,3,10, 7,5,6)
+highStudy<- c(1,2,3,4,1,6,2,7,3,8,10,12,14,5,6,7,8,3,4,5,2,4,3,4,5) 
+friends<- cbind.data.frame(lowStudy, highStudy)
+```
+
+If we were doing a preregistration, we would need to first identify the research question. Let's practice doing that now. 
+
+**Answer** 
+
+Next, we can begin the Null Hypothesis Significance Test: 
+
+#### Step 1: Generate H0 and H1 (Based on Research Question)
+
+The first thing we need to do is determine whether we have one tailed or two tailed hypotheses. Because the question is simply "do they differ," then we are not specifying a direction. 
+
+Null Hypothesis: The average number of friends reported by people who rarely study does not differ from the average number of friends reported by people who study a lot
+mu high study = mu low study
+
+Alternative Hypothesis: The average number of friends reported by people who rarely study differs from the average number of friends reported by people who study a lot
+mu high study ≠ mu low study
+
+#### Step 2: Choose a statistical test (Based on Research Question)
+Using the information provided (and not provided) by the prompt, we can decide what test to run. 
+
+There are two samples mentioned (high study and low study), so we cannot use a one sample test (z or t test). The two groups appear to be independent, so we will use an independent samples t-test 
+
+#### Step 3: Gather data and set critical area
+The data collected are provided above, but we can view it here: 
+```{r}
+friends
+```
+Setting the critical area requires us to know the alpha level. We're going to use an alpha of 0.05 (due to convention). We'll need this both to set the critical area and to draw a conclusion. 
+
+Because it is a 2 tail test, we need to divide alpha in half, so that there are equal amounts (equal probabilities in each tail). 
+
+We will use qt(probability, degrees of freedom) to do this
+Remember, degrees of freedom will be n-1 + n-1 OR N-2
+ 
+ * little n is the number per group
+ * N is the size of the entire sample
+```{r}
+df<- 50-2
+qt(0.025, df)
+```
+Our critical values are -2.01 and 2.01 
+
+#### Step 4: Calculate an observed statistic, calculate a p value
+To calculate the statistic, we'll use t.test(). Specifically, we'll use the following arguments: 
+
+t.test(x,y, var.equal=TRUE)
+
+* x is group 1
+* y is group 2
+* var.equal = TRUE is specifically stating that we are assuming that the variances (spread of the data in each group) are assumed to be equal. this is important for calculating the standard error of the difference. 
+```{r}
+t.test(friends$highStudy, friends$lowStudy, var.equal=TRUE)
+```
+The p value is included in our calculation. 
+
+#### Step 5: Draw conclusion
+Based on the output from step 4, our p value is greater than alpha. Therefore, we fail to reject the null hypothesis. 
+
+An independent samples t-test indicated that there was no statistically-significant difference in the number of friends reported by people who study a lot versus a little, t(48) = 2.00, p = 0.05
+
+### Step 6: Calculate an Effect size. 
+To calculate an effect size for our test:
+* cohen.d(variable 1,variable 2)
+
+```{r}
+library(effsize)
+```
+
+#### Learning Outcome 1 Practice
+Complete a null hypothesis significance test for the following scenario. 
+
+A researcher is interested in whether video games increase children's aggression scores. They ask 32 children to play Mario Kart for 30 minutes before observing how aggressive they are on the playground (1 = not aggressive, 10 = very aggressive). Another 32 children are asked to draw pictures for 30 minutes before observing their aggressive tendencies. You collect the following data: 
+```{r}
+MarioKart<- c(9,7,6,4,5,8,7,6,1,10,4,7,9,8,6,4,2,5,8,5,7,4,6,4,6,8,5,8,3,2,1,4)
+Drawing<- c(1,6,4,3,5,6,3,7,8,7,9,7,5,6,3,6,3,5,7,3,7,4,2,5,2,4,1,2,4,3,1,6)
+aggression<- cbind.data.frame(MarioKart, Drawing)
+```
+1) What is the research question? 
+2) What are the hypotheses? 
+3) What test statistic will help answer their question? Explain why you think this is the appropriate statistic.
+4) What information is provided about the sample? (ok if not a lot)
+5) What is your alpha value and critical values?
+6) Compute your observed statistic and the corresponding p value
+7) What conclusion can you draw? Explain why. 
+8) Calculate the appropriate effect size. 
+
+### Learning Outcome 2: How to conduct a paired samples t-test
+We are interested in whether people remember faces without masks better than faces with masks. To look into this, a researcher decides to test 25 people's memories for faces wearing a mask and for faces without a mask (% of faces identified correctly). They obtain the following data:
+```{r}
+participant<- 1:25
+Mask<- c(20, 15,10,30,35,40,50, 55,60,15,40,35,25,40,10,15,10,20,25,35,40,45,45,30,40)
+noMask<- c(60,50,60,65,70,75,70,40,45,30,35,50,60,40, 50,55,60,45,65,45, 55,60,65,55,55)
+dat<- cbind.data.frame(participant, Mask, noMask)
+```
+Note: the data are the % of people identified correctly in each condition. This means that lower numbers mean less accuracy
+
+#### Step 1: Generate H0 and H1 (Based on Research Question)
+In this case, our alternative hypothesis is one tailed (we think people will do **better** when faces do not have masks and **worse** when the face has a mask on)
+null hypothesis: people will not perform better when remembering faces without masks (mu 1 ≥ mu2)
+alternative hypothesis: people will perform better when remembering faces with masks (mu 1 < mu2)
+
+#### Step 2: Choose a statistical test (Based on Research Question)
+because the same people are participating in both conditions, we should use a related samples ( you may also see this referred to as dependent samples; repeated samples) t test
+
+#### Step 3: Gather data and set critical area
+The data have been gathered above. We can see this data with the following code
+```{r}
+dat
+```
+for the critical area, we will assume alpha = 0.05 (due to convention). because it's a one tailed test, it will all be in the upper tail (side to the right)
+Degrees of freedom are N - 1 because we only have one group (though it is two samples, they are **Dependent**, meaning that only one value needs to be fixed)
+
+```{r}
+
+
+```
+
+#### Step 4: Calculate an observed statistic, calculate a p value
+we'll be using t.test(), but adding a new argument "paired= TRUE" to account for the research design we're using. 
+
+```{r}
+
+```
+
+#### Step 5: Draw conclusion
+Our p value is less than our alpha value, therefore we reject the null hypothesis. 
+
+An independent samples t-test indicated that there was a statistically-significant difference in people's ability to remember faces with and without masks. Specifically, people were worse at remembering faces with masks,t(24) = -6.28, p < 0.01. 
+
+#### Learning Outcome 2 Practice:
+Use the following scenario to complete the NHST steps: 
+
+The researcher from the first practice decides to run the experiment again, but has the same children participate in both conditions (e.g. play Mario Kart and make an observation and then draw and make an observation).  
+
+Using the same data as in Practice 1, answer the following questions:
+
+1) What is the research question? 
+2) What are the hypotheses? 
+3) What test statistic will help answer their question? Explain why you think this is the appropriate statistic.
+4) What information is provided about the sample? (ok if not a lot)
+5) What is your alpha value and critical values?
+6) Compute your observed statistic and the corresponding p value
+7) What conclusion can you draw? Explain why.

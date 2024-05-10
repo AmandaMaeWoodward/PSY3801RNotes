@@ -1,0 +1,122 @@
+---
+title: "PSY3801- Lab Week 3 Descriptive Statistics"
+author: "Amanda Mae Woodward"
+date: "2023-09-16"
+output: html_document
+---
+# Welcome back to lab! 
+
+This week, we will go over how to calculate descriptive statistics. This will allow us to build off of our R foundations and talk about our data meaningfully. 
+
+## Learning Outcomes:
+
+By the end of this lab, students should be able to:
+1) calculate and interpret measures of central tendency
+2) calculate and interpret measures of variability
+
+
+Before we go through descriptive statistics, we need to upload some data. We're going to use data about the amount of candy consumed around Halloween. We have three variables: 
+
+participant: the participant number of each person responding
+candyType: the candy that is being rated
+candyRating: the rating of the candy (1= not like at all, 5= really like)
+candyConsumed: the number of pieces of candy consumed
+
+Try to import the data on your own, then we will go over it together. 
+```{r}
+#copy and paste the dataset name<-read.csv() code here
+```
+
+
+### Learning Outcome #1: calculate and interpret measures of central tendency
+
+#### Mean
+To calculate the mean, we use the function `mean()`. We'll calculate the mean of "candyConsumed" 
+
+`mean(dataset$column)`
+```{r}
+
+
+```
+
+#### Median
+To calculate the median, we use the function `median()` We'll calculate the median of  "candyConsumed" 
+
+`median(data$columnname)`
+
+```{r}
+
+
+```
+
+#### Mode
+This one is a little different. The command "mode" means something else in R, so we need to use the package we installed last week,"modeest." Then we can use the command `mfv()` to find the mode.
+
+ We'll calculate the mode of "candyConsumed"
+ 
+As an aside, `mode(data$columnname)`will not tell us what value occurs the most. It will tell us what type of data are stored in R. 
+
+`mfv(data$columnname)`
+
+```{r}
+library(modeest)
+
+```
+
+#### Central Tendency Practice
+In order to practice the measures of central tendency, we'll use the candy rating variable. While it is technically ordinal, we will treat it as interval for this example. 
+
+1) calculate the mean of the candyRating variable. What does this value mean?
+2) calculate the median of the candyRating variable. What does this value mean?
+3) calculate the mode of the candyRating variable. What does this value mean? 
+
+### Learning Outcome #2: Calculate and interpret measures of variability
+
+#### Range
+To calculate the range, use `range()`.  We'll calculate the range of "candyConsumed"
+`range(data$columnname)`
+```{r}
+
+```
+This gives you the highest and lowest values. Then, you need to subtract the lowest from the highest value. 
+
+Our range is: 
+
+```{r}
+
+```
+
+#### Interquartile Range
+To calculate the interquartile range, we use `IQR()`.  We'll calculate the IQR of "candyConsumed"
+
+`IQR(data$columnname)`
+
+```{r}
+
+```
+
+#### Standard deviation
+
+To calculate the standard deviation, we use `sd()`.  We'll calculate the standard deviation of "candyConsumed"
+
+`sd(data$columnname)`
+
+```{r}
+
+```
+
+#### Variance
+
+To calculate the variance, we use `var()` or `sd()^2`  We'll calculate the variance of "candyConsumed"
+
+`var(data$columnname)`
+```{r}
+
+```
+
+#### Variability Practice
+1) calculate the range of the candyRating variable. What does this value mean? 
+2) calculate the IQRof the candyRating variable. What does this value mean? 
+3) calculate the standard deviation of the candyRating variable. What does this value mean?  
+4) calculate the variance of the candyRating variable. What does this value mean? 
+

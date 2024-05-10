@@ -1,0 +1,158 @@
+---
+title: "one way ANOVA Fall 2023"
+author: "Amanda Mae Woodward"
+date: "11/06/2023"
+output: html_document
+---
+We'll be talking about one way ANOVA this week. Our specific learning goals are:
+ 
+# Learning Outcomes
+- Students will be able to conduct a Null Hypothesis Significance Test for a one way ANOVA
+
+# Scenario
+Let's say that we are interested in how aggressive people act after watching an episode of different TV shows. We ask people to either watch New Girl, That 70's show,or the Bachelor and have the following data: 
+
+```{r}
+show<- c(rep("NewGirl", 5), rep("70sShow", 5), rep("Bachelor", 5))
+aggressionResponse<- c(2,3,1,4,3,4,5,3,4,5,6,8,7,9,7)
+aggressionData<- cbind.data.frame(show, aggressionResponse)
+```
+
+## Null Hypothesis Significance Test: 
+The steps for Null Hypothesis Significance Testing for a one way ANOVA are below: 
+Step 1: Generate H0 and H1 (Based on Research Question)
+Step 2: Choose a statistical test (Based on Research Question)
+Step 3: Set critical area
+Step 4: Gather Data
+Step 5: Calculate an observed statistic, calculate a p value
+Step 6: Draw Conclusion
+Step 7: Calculate an Effect Size
+Step 8: Conduct multiple comparisons tests 
+
+### Step 1: Generate H0 and H1 (Based on Research Question)
+Our research question is whether the average amount of aggressive behaviors differs after watching each show
+
+
+
+### Step 2: Choose a statistical test (Based on Research Question)
+
+We'll run a one way ANOVA 
+
+Why? 
+
+**Answer** because we have 2 or more independent groups
+
+### Step 3: Set critical area
+ 
+We can also find a critical F value using the function `qF()`. This requires us to know two types of degrees of freedom
+
+Degree of Freedom between groups: Number of groups -1
+Degree of Freedom within groups: Number of people - number of groups
+
+`qf(probability, degree of freedom between, degree of freedom within)`
+```{r}
+dfBetween<- 3-1
+dfWithin <- 15-3
+qf(0.05,dfBetween, dfWithin, lower.tail=FALSE)
+```
+
+### Step 4: Gather data
+The data have already been gathered for us, but we'll copy and paste it here so you can see it
+```{r}
+aggressionData
+```
+
+We have 5 people watching each of the shows. The alpha level will be set to 0.05.
+
+### Step 5: Calculate an observed statistic, calculate a p value
+To calculate our F statistic, we'll use `aov()`. The function is used in the following way: 
+
+`aov(Dependent Variable ~ Group/Independent Variable, data=dat)`
+- What column has our groups listed? 
+- What column has our dependent variable? 
+```{r}
+aov(aggressionResponse~show, data=aggressionData)
+```
+
+This gives us our sums of squares and degrees of freedom. We could calculate the rest by hand. Alternatively, we can save our ANOVA as an object in R and take a summary of it
+
+```{r}
+aggressionAnova<- aov(aggressionResponse~show, data=aggressionData)
+summary(aggressionAnova)
+```
+This lets us see our degrees of freedom, sums of squares, mean squares, F statistic, and probability. 
+
+### Step 6: Draw Conclusion
+
+Based on these numbers, we can draw a conclusion. 
+
+We reject our null hypothesis because the p value associated with our F statistic is less than 0.05 (remember, scientific notation!). We can conclude that at least one of our means is statistically different from the others. 
+
+### Step 6: Calculate effect size 
+to calculate the effect size, we need the lsr packages (remember to install it!)
+```{r}
+library(lsr)
+etaSquared(aggressionAnova)
+```
+
+
+### Step 7: Conduct multiple comparisons tests 
+The final step will allow us to see where the differences lie. We'll run a Tukey's Honest Significant Difference (HSD) test 
+```{r}
+TukeyHSD(aggressionAnova)
+```
+
+We can now add which groups differ from the others to our aggression ANOVA. Bachelor and that 70s show and the Bachelor and New girl are statistically different from one another. 
+
+#### Practice
+You are interested in people's ratings of different types of cookies. You bring 15 people into lab, and randomly assign 5 people to rate chocolate chip cookies, 5 to rate snickerdoodles, and 5 to rate funfetti. You obtain the following data: 
+
+```{r}
+cookie<- c(rep("chocolateChip", 5), rep("snickerdoodles", 5), rep("funfetti", 5))
+rating<- c(9,7,6,8,7,7,5,4,6,7,4,5,7,6,6)
+cookieRating<- cbind.data.frame(cookie, rating)
+```
+
+Complete a Null Hypothesis Significance Test to see if these groups differ. 
+Step 1: Generate H0 and H1 (Based on Research Question)
+null: there is no statistical difference in the average rating of each type of cookie
+alternative: the average rating for at least one cookie is statistically different than the others
+
+Step 2: Choose a statistical test (Based on Research Question)
+one way ANOVA
+
+Step 3: Set critical area
+alpha is 0.05. our critical area is the top .05 probability 
+
+```{r}
+dfBetween<- 3-1
+dfWithin <- 15-3
+qf(0.05,dfBetween, dfWithin, lower.tail=FALSE)
+```
+
+
+Step 4: Gather Data
+our data are located in the cookieRating dataset
+```{r}
+cookieRating
+```
+
+
+Step 5: Calculate an observed statistic, calculate a p value
+```{r}
+summary(aov(rating~cookie, cookieRating))
+```
+
+Step 6: Draw Conclusion
+We fail to reject the null hypothesis because the p value associated with our F statistic is greater than 0.05. 
+
+Step 7: Calculate an Effect Size
+```{r}
+etaSquared(aov(rating~cookie, cookieRating))
+```
+
+Step 7: Conduct multiple comparisons tests 
+```{r}
+TukeyHSD(aov(rating~cookie, cookieRating))
+```
+

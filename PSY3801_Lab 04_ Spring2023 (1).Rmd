@@ -1,0 +1,156 @@
+---
+title: "Lab 04- Visualizing Data and standard scores"
+author: "Amanda Mae Woodward"
+date: "09/22/2023"
+output: html_document
+---
+# Welcome to Lab 4! 
+Last week, we focused on calculating descriptive statistics. This week, we'll focus on visualizing data and relating those visualizations to our descriptive statistics. 
+
+## Learning Outcomes: 
+By the end of this lab, students should be able to: 
+- Create simple and grouped frequency tables 
+- Create bar graphs, histograms, and frequency polygons
+- Relate graphs to the measures of central tendency and variability 
+- Calculate Standard Scores
+
+### Loading Data
+Before we can start programming, we'll need to load our data. Remember, we upload our data by clicking the "Import Data" button. We've done this before, so I will let you try it on your own first. Then, we'll come together and I'll show you. 
+
+After the data are imported, we need to copy the code to import the data into our R Markdown file. 
+```{r}
+#copy code here
+```
+
+Our data consists of 10 participants. It also includes each participant's depression score, their anxiety score, and symptom severity. Depression scores and anxiety scores are measured on a scale from 1-20. Symptom severity is labelled as low, medium, or high. 
+
+### Learning Outcome 1: Create simple and grouped frequency tables 
+
+#### Simple frequency table
+To make a simple frequency table, we need to specify whether we have qualitative or quantitative data.
+
+The function for qualitative data is `table(data$column)`
+
+Let's try for the symptom severity column
+```{r}
+
+```
+
+The function for quantitative data is `table(factor(data$column,lowest value: highest value))`. For depression, we know that the scores range from 1 - 20. 1 is our lowest value and 20 is the highest value
+
+```{r}
+
+```
+
+#### Grouped frequency table
+Let's say that we want to make a group frequency table for depression scores. We're going to use 2 intervals. 
+
+As an aside, there is a formula we can use to detmermine an ideal number of intervals, but you'll be told how many to use for this class. 
+
+**Step 1:** requires us to cut our data into intervals. `cut2()` allows us to do this by splitting the data into a specific number of groups. `cut2()` is in the `Hmisc` package. We need to install this in the console. 
+
+Copy and paste this code in to the console: 
+install.packages("Hmisc")
+```{r}
+library(Hmisc)
+cut2(PSY3801_lab04$depressionScore, g=2)
+```
+The output is showing us what our 2 intervals are. We need to either save them to be able to use them in the table or copy the code.
+
+```{r}
+group<- cut2(PSY3801_lab04$depressionScore, g=2)
+```
+
+```{r}
+table(group)
+#OR
+table(cut2(PSY3801_lab04$depressionScore, g=2))
+```
+#### Practice: 
+1. Make a simple frequency table for anxiety. 
+2. Make a grouped frequency table for anxiety with 2 intervals.
+3. Make a grouped frequency table for anxiety with 5 intervals. 
+4. What do you notice about these intervals?
+
+### Learning Outcome 2: Create bar graphs, histograms, frequency polygons, and boxplots
+
+We can also gain information about data by creating graphs. We will mostly use a function called ggplot() while graphing because it allows you to make customized graphs. As the semester continues, we will cover more ways to change them. To use ggplot() you will need to install `ggplot2()`. Paste the following code into your console:
+install.packages("ggplot2").
+
+#### Ggplot 
+
+`ggplot()` creates graphs in layers. The first section is **where** we say what data we want to plot. 
+
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+ggplot(PSY3801_lab04)
+```
+If you run this, you will see that a blank box appears. To get more of a graph, we need to add more information. Specifically, we will need to include a function called `aes()`, which stands for aesthetics. This tells ggplot **what** to graph. We will plot the depression score column. `ggplot()` is a special case where we do not have to write PSY3801_lab04$depressionScore, we can just write the name rating (the programmers who made ggplot wanted to make life a little easier) 
+```{r}
+ggplot(PSY3801_lab04, aes(depressionScore))
+```
+You'll see that we now have an x axis that's labeled depressionScore. Now that ggplot knows where to get data and what to graph, the next step involves adding a second layer to our plot. This will tell ggplot **how** to graph the data. 
+
+#### Histogram
+
+To make a histogram, we'll add a second layer `geom_histogram()`. 
+
+```{r}
+ggplot(PSY3801_lab04, aes(depressionScore))+ geom_histogram()
+```
+
+To make a more specific histogram, we can change the number of bins, or intervals. Let's use 6 bins.
+
+```{r}
+ggplot(PSY3801_lab04, aes(depressionScore))+ geom_histogram(bins=6)
+```
+
+#### Frequency Polygon
+To make a frequency polygon, we will use the same code as before. However, instead of adding `geom_histogram()`, we will add `geom_freqpoly()`. 
+
+```{r}
+ggplot(PSY3801_lab04, aes(depressionScore))+ geom_freqpoly()
+```
+The shape looks just like the histogram! 
+
+We can also change the number of bins in the frequency polygon by using bins= number. Let's make a polygon with 6 intervals.  
+```{r}
+ggplot(PSY3801_lab04, aes(depressionScore)) + geom_freqpoly(bins=6)
+```
+You'll see that the line is smoother than the previous graph. (you can use the arrows at the top of the bottom right panels to look at previous graphs)
+
+#### Box Plot
+To make a box plot, we'll use the same code, with `geom_boxplot()`.
+```{r}
+ggplot(PSY3801_lab04, aes(depressionScore)) + geom_boxplot()
+```
+
+#### Bar graph
+We can make bar graphs with the same code, but using `geom_bar()`.We'll use the symptom severity variable to do this.
+```{r}
+ggplot(PSY3801_lab04, aes(symptomSeverity))+ geom_bar()
+```
+
+#### Practice: 
+1) Make a frequency polygon for anxiety scores
+2) Make a histogram for anxiety scores
+3) Make a boxplot for anxiety scores
+
+### Learning Outcome 3: Relate graphs to the measures of central tendency and variability 
+
+Let's look through the graps we've created for depression scores. In small groups, I'd like you to describe 1) the shape of the distribution, 2) think about where measures of central tendency would fall, and 3) describe the variability. 
+
+### Learning Outcome 4: Create standard scores
+Standard scores can be created in two ways. The first is using the by hand calculation: score- mean/standard deviation. 
+
+```{r}
+(PSY3801_lab04$depressionScore- mean(PSY3801_lab04$depressionScore))/sd(PSY3801_lab04$depressionScore)
+```
+
+The other thing that can be done is to use the `scale()`. This will calculate standard scores for your whole column of data
+```{r}
+scale(PSY3801_lab04$depressionScore)
+```
+
+
